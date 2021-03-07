@@ -3,6 +3,7 @@ import { PedidoService } from './pedido.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { Usuario } from 'src/entities/usuario.entity';
+import { Cartao } from 'src/entities/cartao.entity';
 
 @Controller('pedido')
 export class PedidoController {
@@ -11,7 +12,8 @@ export class PedidoController {
   @Post()
   async create(@Body() createPedidoDto: CreatePedidoDto) {
     const usuario = await Usuario.findOne(createPedidoDto.idUsuario)
-    return this.pedidoService.create(usuario, createPedidoDto);
+    const cartao = await Cartao.findOne(createPedidoDto.idCartao)
+    return this.pedidoService.create(usuario, cartao, createPedidoDto);
   }
 
   @Get()

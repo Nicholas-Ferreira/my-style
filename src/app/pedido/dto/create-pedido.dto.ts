@@ -1,20 +1,14 @@
-import { IsCreditCard, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsCreditCard, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Usuario } from 'src/entities/usuario.entity';
+import { CreateItemPedidoDto } from './create-item-pedidos.dto';
 
 export class CreatePedidoDto {
   @IsNumber()
   idUsuario: number
-  
+
   @IsNumber()
-  @IsNotEmpty()
-  quantidade: number
+  idCartao: number
 
-  @IsNotEmpty()
-  @IsString()
-  status: string;
-
-  @IsNotEmpty()
-  @IsString()
-  produto: string;
-
+  @IsArray()
+  itens: CreateItemPedidoDto[]
 }

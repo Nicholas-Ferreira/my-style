@@ -9,13 +9,7 @@ export class Pedido extends BaseEntity {
   id: number;
 
   @Column()
-  quantidade: number;
-
-  @Column()
   status: string;
-
-  @Column()
-  produto: string;
 
   @CreateDateColumn()
   criado_em: Date;
