@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CategoriaProduto } from 'src/entities/categoriaProduto.entity';
 import { Loja } from 'src/entities/loja.entity';
 import { Produto } from 'src/entities/produto.entity';
 import { CreateProdutoDto } from './dto/create-produto.dto';
@@ -6,8 +7,8 @@ import { UpdateProdutoDto } from './dto/update-produto.dto';
 
 @Injectable()
 export class ProdutoService {
-  create(loja: Loja, createProdutoDto: CreateProdutoDto) {
-    return Produto.create({ ...createProdutoDto, loja }).save();
+  create(loja: Loja, categoria: CategoriaProduto, createProdutoDto: CreateProdutoDto) {
+    return Produto.create({ ...createProdutoDto, loja, categoria }).save();
   }
 
   findAll() {

@@ -2,23 +2,15 @@ import { IsCreditCard, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-vali
 import { Loja } from 'src/entities/loja.entity';
 import { Usuario } from 'src/entities/usuario.entity';
 
-export class CreateProdutoDto {
-  @IsNumber()
-  idLoja: number
-  
-  @IsNumber()
-  idCategoria: number
-  
-  @IsNumber()
-  @IsNotEmpty()
-  preco: number
-
+export class CreateCategoriaDto {
   @IsString()
   @IsNotEmpty()
-  tamanho: string;
+  estilo: string
 
+  @IsString()
+  marca: string;
+  
   @IsNotEmpty()
   @IsString()
-  cor: string;
-
+  nome: string;
 }

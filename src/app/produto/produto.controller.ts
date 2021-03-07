@@ -3,6 +3,7 @@ import { ProdutoService } from './produto.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { Loja } from 'src/entities/loja.entity';
+import { CategoriaProduto } from 'src/entities/categoriaProduto.entity';
 
 @Controller('produto')
 export class ProdutoController {
@@ -11,7 +12,8 @@ export class ProdutoController {
   @Post()
   async create(@Body() createProdutoDto: CreateProdutoDto) {
     const loja = await Loja.findOne(createProdutoDto.idLoja)
-    return this.produtoService.create(loja, createProdutoDto);
+    const categoria = await CategoriaProduto.findOne(createProdutoDto.idCategoria)
+    return this.produtoService.create(loja, categoria, createProdutoDto);
   }
 
   @Get()
