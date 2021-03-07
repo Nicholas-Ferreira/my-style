@@ -11,6 +11,7 @@ export function IsValidCpfOrCnpj(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
+          if(!value) return false
           const verifyDocument = new VerifyDocument();
           return verifyDocument.isValidCpfOrCnpj(value);
         }
@@ -49,6 +50,7 @@ export function IsValidCnpj(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
+          if(!value) return false
           const verifyDocument = new VerifyDocument();
           return verifyDocument.validCnpj(value);
         }

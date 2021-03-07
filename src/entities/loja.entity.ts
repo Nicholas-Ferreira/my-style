@@ -15,7 +15,7 @@ export class Loja extends BaseEntity {
   logomarca: string;
 
   @Column()
-  cnpj: string;
+  cnpj: number;
   
   @Column()
   email: string;

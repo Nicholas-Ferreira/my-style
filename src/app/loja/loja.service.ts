@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Loja } from 'src/entities/loja.entity';
+import { Usuario } from 'src/entities/usuario.entity';
 import { CreateLojaDto } from './dto/create-loja.dto';
 import { UpdateLojaDto } from './dto/update-loja.dto';
 
 @Injectable()
 export class LojaService {
-  create(createLojaDto: CreateLojaDto) {
-    return Loja.create(createLojaDto).save()
+  create(usuario: Usuario, createLojaDto: CreateLojaDto) {
+    return Loja.create({
+      ...createLojaDto,
+      representante: usuario
+    }).save()
   }
 
   findAll() {

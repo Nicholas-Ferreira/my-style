@@ -2,14 +2,18 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { LojaService } from './loja.service';
 import { CreateLojaDto } from './dto/create-loja.dto';
 import { UpdateLojaDto } from './dto/update-loja.dto';
+import { Usuario } from 'src/entities/usuario.entity';
 
 @Controller('loja')
 export class LojaController {
-  constructor(private readonly lojaService: LojaService) {}
+  constructor(private readonly lojaService: LojaService) { }
 
   @Post()
-  create(@Body() createLojaDto: CreateLojaDto) {
-    return this.lojaService.create(createLojaDto);
+  async create(
+    @Body() createLojaDto: CreateLojaDto
+  ) {
+    const usuario = await Usuario.findOne(createLojaDto.idUsuario)
+    return this.lojaService.create(usuario, createLojaDto);
   }
 
   @Get()

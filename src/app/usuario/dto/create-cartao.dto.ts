@@ -1,20 +1,20 @@
 import { IsCreditCard, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Usuario } from 'src/entities/usuario.entity';
 
-export class CreatePedidoDto {
-  @IsNumber()
-  idUsuario: number
-  
-  @IsNumber()
-  @IsNotEmpty()
-  quantidade: number
-
-  @IsNotEmpty()
+export class CreateCartaoDto {
   @IsString()
-  status: string;
+  @IsNotEmpty()
+  titular: string;
+
+  @IsCreditCard()
+  @IsNotEmpty()
+  numero: number;
 
   @IsNotEmpty()
-  @IsString()
-  produto: string;
+  @IsNumber()
+  codigo_seguranca: number;
 
+  @IsNotEmpty()
+  @IsDate()
+  data_vencimento: Date;
 }

@@ -14,7 +14,7 @@ export class Endereco extends BaseEntity{
   numero: number;
 
   @Column()
-  cep: string;
+  cep: number;
 
   @Column()
   complemento: string;

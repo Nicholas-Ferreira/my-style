@@ -12,9 +12,6 @@ export class Pedido extends BaseEntity {
   quantidade: number;
 
   @Column()
-  loja: string;
-
-  @Column()
   status: string;
 
   @Column()
