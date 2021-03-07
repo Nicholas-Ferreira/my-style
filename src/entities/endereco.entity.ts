@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, BaseEntity } from 'typeorm';
 import { Usuario } from './usuario.entity';
 
 @Entity()
-export class Endereco {
+export class Endereco extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 

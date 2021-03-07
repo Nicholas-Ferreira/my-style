@@ -1,11 +1,11 @@
 import { Endereco } from './endereco.entity';
 import { Cartao } from './cartao.entity';
 import { Loja } from './loja.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, BaseEntity } from 'typeorm';
 import { Pedido } from './pedido.entity';
 
 @Entity()
-export class Usuario {
+export class Usuario extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, BaseEntity } from 'typeorm';
 import { Pedido } from './pedido.entity';
 import { Usuario } from './usuario.entity';
 
 @Entity()
-export class Cartao {
+export class Cartao extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,10 +1,10 @@
 import { Produto } from './produto.entity';
 import { Pedido } from './pedido.entity';
 import { Usuario } from './usuario.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany, BaseEntity } from 'typeorm';
 
 @Entity()
-export class Loja {
+export class Loja extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
