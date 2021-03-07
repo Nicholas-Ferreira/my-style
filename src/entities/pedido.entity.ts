@@ -1,7 +1,8 @@
 import { Cartao } from './cartao.entity';
-import { DetalhesPedido } from './detalhesPedido.entity';
+import { ItemPedido } from './itemPedido.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany, BaseEntity } from 'typeorm';
 import { Usuario } from './usuario.entity';
+import { Entrega } from './entrega.entity';
 @Entity()
 export class Pedido extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -10,18 +11,14 @@ export class Pedido extends BaseEntity {
   @Column()
   quantidade: number;
 
-
   @Column()
   loja: string;
-
 
   @Column()
   status: string;
 
-
   @Column()
   produto: string;
-
 
   @CreateDateColumn()
   criado_em: Date;
@@ -32,6 +29,9 @@ export class Pedido extends BaseEntity {
   @ManyToOne(type => Usuario, usuario => usuario.pedidos)
   usuario: Usuario;
   
-  @OneToMany(type => DetalhesPedido, detalhes => detalhes.pedido)
-  detalhes: DetalhesPedido[];
+  @OneToMany(type => ItemPedido, detalhes => detalhes.pedido)
+  detalhes: ItemPedido[];
+  
+  @OneToMany(type => Entrega, entrega => entrega.pedido)
+  entregas: Entrega[];
 }   

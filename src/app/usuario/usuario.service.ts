@@ -5,7 +5,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Injectable()
 export class UsuarioService {
-  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
+  create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     return Usuario.create(createUsuarioDto).save()
   }
 

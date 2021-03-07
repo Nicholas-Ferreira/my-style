@@ -3,9 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DetalhesEntregaPedido } from './entities/detalhesEntregaPedido.entity';
-import { DetalhesPedido } from './entities/detalhesPedido.entity';
-import { DetalhesProduto } from './entities/detalhesProduto.entity';
+import { ItemPedido } from './entities/itemPedido.entity';
 import { CategoriaProduto } from './entities/categoriaProduto.entity';
 import { Cartao } from './entities/cartao.entity';
 import { Endereco } from './entities/endereco.entity';
@@ -15,6 +13,8 @@ import { Pedido } from './entities/pedido.entity';
 import { Produto } from './entities/produto.entity';
 import { Usuario } from './entities/usuario.entity';
 import { ProdutoModule } from './app/produto/produto.module';
+import { PedidoModule } from './app/pedido/pedido.module';
+import { LojaModule } from './app/loja/loja.module';
 
 
 @Module({
@@ -29,9 +29,7 @@ import { ProdutoModule } from './app/produto/produto.module';
       entities: [
         Cartao, 
         CategoriaProduto,
-        DetalhesEntregaPedido,
-        DetalhesPedido,
-        DetalhesProduto,
+        ItemPedido,
         Endereco,
         Entrega,
         Loja,
@@ -43,7 +41,9 @@ import { ProdutoModule } from './app/produto/produto.module';
       logging: false,
     }),
     UsuarioModule,
-    ProdutoModule
+    ProdutoModule,
+    PedidoModule,
+    LojaModule
   ],
   controllers: [AppController],
   providers: [AppService],

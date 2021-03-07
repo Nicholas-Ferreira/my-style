@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity, ManyToOne } from 'typeorm';
+import { Endereco } from './endereco.entity';
+import { Pedido } from './pedido.entity';
 
 @Entity()
 export class Entrega extends BaseEntity {
@@ -7,4 +9,10 @@ export class Entrega extends BaseEntity {
 
   @Column()
   status: string;
+
+  @ManyToOne(type => Endereco, endereco => endereco.entragas)
+  endereco: Endereco;
+
+  @ManyToOne(type => Pedido, pedido => pedido.entregas)
+  pedido: Pedido;
 }   
