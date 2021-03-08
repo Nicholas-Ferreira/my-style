@@ -1,14 +1,21 @@
+import { Expose } from 'class-transformer';
 import { IsArray, IsCreditCard, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Usuario } from 'src/entities/usuario.entity';
-import { CreateItemPedidoDto } from './create-item-pedidos.dto';
 
 export class CreatePedidoDto {
   @IsNumber()
+  @Expose()
   idUsuario: number
 
   @IsNumber()
+  @Expose()
   idCartao: number
-
+  
   @IsArray()
-  itens: CreateItemPedidoDto[]
+  @Expose()
+  itens: {
+    produtoId:number;
+    preco:number;
+    quantidade: number;
+  }[];
 }

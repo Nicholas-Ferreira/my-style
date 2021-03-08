@@ -18,7 +18,7 @@ export class Usuario extends BaseEntity {
   @Column()
   cpf: string;
   
-  @Column()
+  @Column({ select: false })
   senha: string;
 
   @Column()

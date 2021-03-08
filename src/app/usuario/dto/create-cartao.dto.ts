@@ -6,7 +6,7 @@ export class CreateCartaoDto {
   @IsNotEmpty()
   titular: string;
 
-  @IsCreditCard()
+  //@IsCreditCard()
   @IsNotEmpty()
   numero: number;
 
@@ -15,6 +15,6 @@ export class CreateCartaoDto {
   codigo_seguranca: number;
 
   @IsNotEmpty()
-  @IsDate()
+  //@IsDate()
   data_vencimento: Date;
 }

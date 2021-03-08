@@ -6,6 +6,9 @@ import { Produto } from './produto.entity';
 export class ItemPedido extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  preco: number;
   
   @Column()
   quantidade: number;

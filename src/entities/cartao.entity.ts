@@ -13,15 +13,15 @@ export class Cartao extends BaseEntity {
   @Column()
   numero: number;
 
-  @Column()
+  @Column({ select: false })
   codigo_seguranca: number;
 
   @Column()
   data_vencimento: Date;
-  
+
   @OneToMany(type => Pedido, pedido => pedido.cartao)
   pedidos: Pedido[];
-  
+
   @ManyToOne(type => Usuario, usuario => usuario.cartoes)
   usuario: Usuario;
-}   
+}
