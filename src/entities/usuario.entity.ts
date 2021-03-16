@@ -1,31 +1,45 @@
 import { Endereco } from './endereco.entity';
 import { Cartao } from './cartao.entity';
 import { Loja } from './loja.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, BaseEntity, UpdateDateColumn, Unique } from 'typeorm';
 import { Pedido } from './pedido.entity';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
+@Unique(['email'])
 export class Usuario extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 200 })
   nome: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 200 })
   email: string;
-
-  @Column()
-  cpf: string;
   
-  @Column({ select: false })
+  @Column({ select: false, nullable: false })
   senha: string;
+  
+  @Column({ nullable: false, type: 'varchar', length: 20 })
+  role: string;
 
-  @Column()
-  idade: number;
+  @Column({ nullable: true, type: 'varchar', length: 64 })
+  confirmationToken: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 64 })
+  recoverToken: string;
+
+  @Column({  select: false, nullable: false })
+  salt: string;
+
+  @Column({ nullable: false, default: true })
+  status: boolean;
 
   @CreateDateColumn()
   criado_em: Date;
+  
+  @UpdateDateColumn()
+  atualizado_em: Date;
 
   @OneToMany(type => Loja, loja => loja.representante)
   lojas: Loja[];
@@ -38,4 +52,10 @@ export class Usuario extends BaseEntity {
 
   @OneToMany(type => Endereco, endereco => endereco.usuario)
   enderecos: Endereco[];
+
+  async checkPassword(password: string): Promise<boolean> {
+    console.log(password, this.salt)
+    const hash = await bcrypt.hash(password, this.salt);
+    return hash === this.senha;
+  }
 }   

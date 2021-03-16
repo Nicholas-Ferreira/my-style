@@ -15,6 +15,11 @@ import { Usuario } from './entities/usuario.entity';
 import { ProdutoModule } from './app/produto/produto.module';
 import { PedidoModule } from './app/pedido/pedido.module';
 import { LojaModule } from './app/loja/loja.module';
+import { AuthModule } from './auth/auth.module';
+import { ProviderRolesGuard, RolesGuard } from './shared/roles/guard.roles';
+import { APP_GUARD } from '@nestjs/core/constants';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 
 @Module({
@@ -27,7 +32,7 @@ import { LojaModule } from './app/loja/loja.module';
       password: '',
       database: 'mystyle',
       entities: [
-        Cartao, 
+        Cartao,
         CategoriaProduto,
         ItemPedido,
         Endereco,
@@ -43,9 +48,10 @@ import { LojaModule } from './app/loja/loja.module';
     UsuarioModule,
     ProdutoModule,
     PedidoModule,
-    LojaModule
+    LojaModule,
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],
 })
-export class AppModule {}
+export class AppModule { }
