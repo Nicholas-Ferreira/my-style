@@ -2,7 +2,7 @@ import { SignInUsuarioDto } from './dto/signin-usuario.dto';
 import { SignUpUsuarioDto } from './dto/signup-usuario.dto';
 import { Usuario } from 'src/entities/usuario.entity';
 import { Injectable } from '@nestjs/common';
-import { ConflictException, InternalServerErrorException, NotAcceptableException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
+import { ConflictException, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
 import { UserRole } from 'src/shared/roles/usuario.roles';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -49,9 +49,11 @@ export class AuthService {
 
   async signIn(credentialsDto: SignInUsuarioDto) {
     const { email, senha } = credentialsDto;
-    const usuario = await Usuario.findOneOrFail({ email, status: true }, { select: ['salt', 'senha'] });
-    const auth = await usuario.checkPassword(senha)
+    
+    const usuario = await Usuario.findOne({ email, status: true }, { select: ['salt', 'senha'] });
+    if (!usuario) throw new NotFoundException("Usuário não encontrado")
 
+    const auth = await usuario.checkPassword(senha)
     if (!auth) throw new UnauthorizedException('Credenciais inválidas');
 
     const jwtPayload = { id: usuario.id };
@@ -60,7 +62,8 @@ export class AuthService {
   }
 
   async confirmarEmail(usuario_id, token) {
-    const usuario = await Usuario.findOneOrFail(usuario_id)
+    const usuario = await Usuario.findOne(usuario_id, { select: ['id', 'status', 'confirmationToken'] })
+    if (!usuario) throw new NotFoundException("Usuário não encontrado")
     if (usuario.status) throw new NotAcceptableException("Usuário já validado")
     if (usuario.confirmationToken != token) throw new UnauthorizedException("Token Inválido")
 

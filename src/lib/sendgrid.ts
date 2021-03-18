@@ -29,7 +29,7 @@ export class SendGrid {
     const sender = await sgMail.send(email)
       .then((res) => res)
       .catch(err => err)
-    console.log(email, sender)
+    console.log('SendGrid: ', email, sender.statusCode)
     return sender
   }
 

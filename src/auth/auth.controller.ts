@@ -26,7 +26,7 @@ export class AuthController {
 
   @Get('/confirm/:user_id/:token')
   async confirm(@Param('user_id') user_id: string, @Param('token') token: string) {
-    console.log(user_id, token)
+    return this.authService.confirmarEmail(user_id, token)
   }
 
   @Get('/me')
