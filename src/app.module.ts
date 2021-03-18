@@ -20,8 +20,6 @@ import { ProviderRolesGuard, RolesGuard } from './shared/roles/guard.roles';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
-
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({

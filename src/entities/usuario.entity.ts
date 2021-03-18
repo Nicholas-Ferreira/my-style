@@ -16,20 +16,20 @@ export class Usuario extends BaseEntity {
 
   @Column({ nullable: false, type: 'varchar', length: 200 })
   email: string;
-  
+
   @Column({ select: false, nullable: false })
   senha: string;
-  
+
   @Column({ nullable: false, type: 'varchar', length: 20 })
   role: string;
 
-  @Column({ nullable: true, type: 'varchar', length: 64 })
+  @Column({ select: false, nullable: true, type: 'varchar', length: 64 })
   confirmationToken: string;
 
   @Column({ nullable: true, type: 'varchar', length: 64 })
   recoverToken: string;
 
-  @Column({  select: false, nullable: false })
+  @Column({ select: false, nullable: false })
   salt: string;
 
   @Column({ nullable: false, default: true })
@@ -37,7 +37,7 @@ export class Usuario extends BaseEntity {
 
   @CreateDateColumn()
   criado_em: Date;
-  
+
   @UpdateDateColumn()
   atualizado_em: Date;
 
@@ -58,4 +58,4 @@ export class Usuario extends BaseEntity {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.senha;
   }
-}   
+}

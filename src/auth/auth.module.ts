@@ -5,7 +5,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ProviderRolesGuard } from 'src/shared/roles/guard.roles';
-
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),

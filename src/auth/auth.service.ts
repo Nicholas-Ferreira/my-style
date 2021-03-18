@@ -2,11 +2,12 @@ import { SignInUsuarioDto } from './dto/signin-usuario.dto';
 import { SignUpUsuarioDto } from './dto/signup-usuario.dto';
 import { Usuario } from 'src/entities/usuario.entity';
 import { Injectable } from '@nestjs/common';
-import { ConflictException, InternalServerErrorException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
+import { ConflictException, InternalServerErrorException, NotAcceptableException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
 import { UserRole } from 'src/shared/roles/usuario.roles';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { SendGrid } from 'src/lib/sendgrid';
 
 @Injectable()
 export class AuthService {
@@ -15,23 +16,30 @@ export class AuthService {
   ) { }
 
   async signUp(createUsuarioDto: SignUpUsuarioDto): Promise<Usuario> {
+    const { email, nome, senha } = createUsuarioDto;
+
     if (createUsuarioDto.senha != createUsuarioDto.confirmar_senha) {
       throw new UnprocessableEntityException('As senhas não conferem');
     }
 
-    const { email, nome, senha } = createUsuarioDto;
-    const usuario = new Usuario;
-    usuario.email = email;
-    usuario.nome = nome;
-    usuario.role = UserRole.USER;
-    usuario.status = true;
-    usuario.confirmationToken = crypto.randomBytes(32).toString('hex');
-    usuario.salt = await bcrypt.genSalt();
-    usuario.senha = await bcrypt.hash(senha, usuario.salt);
+    const usuario = await Usuario.findOne({ where: { email: email } })
+    if (usuario) {
+      if (usuario.status) throw new ConflictException('Endereço de email já está em uso');
+      else return usuario
+    }
 
-    return await usuario.save()
+    const novo_usuario = new Usuario();
+    novo_usuario.email = email;
+    novo_usuario.nome = nome;
+    novo_usuario.role = UserRole.USER;
+    novo_usuario.status = false;
+    novo_usuario.confirmationToken = crypto.randomBytes(32).toString('hex');
+    novo_usuario.salt = await bcrypt.genSalt();
+    novo_usuario.senha = await bcrypt.hash(senha, novo_usuario.salt);
+
+    return await novo_usuario.save()
       .catch(error => {
-        if (error.code.toString() === '23505') {
+        if (error.code.toString() === '23505' || error.code == 'ER_DUP_ENTRY') {
           throw new ConflictException('Endereço de email já está em uso');
         } else {
           throw new InternalServerErrorException('Erro ao salvar o usuário no banco de dados');
@@ -49,5 +57,23 @@ export class AuthService {
     const jwtPayload = { id: usuario.id };
     const token = await this.jwtService.sign(jwtPayload);
     return { token }
+  }
+
+  async confirmarEmail(usuario_id, token) {
+    const usuario = await Usuario.findOneOrFail(usuario_id)
+    if (usuario.status) throw new NotAcceptableException("Usuário já validado")
+    if (usuario.confirmationToken != token) throw new UnauthorizedException("Token Inválido")
+
+    usuario.status = true
+    return usuario.save()
+  }
+
+  async sendConfirmationToken(usuario: Usuario) {
+    usuario = await Usuario.findOneOrFail(usuario.id, { select: ['id', 'email', 'confirmationToken'] })
+    new SendGrid({
+      to: usuario.email,
+      subject: "Varifique seu e-mail",
+      text: `<a href='http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}'>Confirmar e-mail</a>`
+    }).send()
   }
 }
