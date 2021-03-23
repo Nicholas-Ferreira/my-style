@@ -1,36 +1,63 @@
+import { InternalServerErrorException } from "@nestjs/common"
+import { extname } from "path"
+import encode from "src/utils/encode"
+
 const sgMail = require('@sendgrid/mail')
 interface Mensagem {
   to: string;
   subject: string;
-  text: string;
+  bcc?: string;
+  responseTo?: string;
+  text?: string;
+  html?: string;
+  templateId?: string;
+  dynamicTemplateData?: Object;
+  anexo?: Array<{ url: string, nome: string }>
 }
 
 export class SendGrid {
-  private to: string
   private from: string = "archeros.devs@gmail.com"
-  private subject: string
-  private text: string
+  private email: Mensagem
 
-  constructor(data: Mensagem) {
-    this.to = data.to
-    this.subject = data.subject
-    this.text = data.text
+  constructor(email: Mensagem) {
+    this.email = email
   }
 
-  async send(to?: string): Promise<{ error?: string }> {
-    if (!to) to = this.to
+  async send(_to?: string): Promise<{ error?: string }> {
+    const { to, subject, text, html, bcc, anexo = [], templateId, dynamicTemplateData } = this.email
+    if (!_to) _to = to
+
+    const anexos = await Promise.all(anexo.map(async anexo => {
+      const extUrl = extname(anexo.url);
+      const extName = extname(anexo.nome);
+      if (extUrl !== extName) throw new InternalServerErrorException();
+
+      const { type, content } = await encode(anexo.url);
+      return {
+        type,
+        filename: anexo.nome,
+        content,
+        disposition: 'attachment'
+      };
+    }));
 
     const email = {
-      to: this.to,
-      from: this.from, // Change to your verified sender
-      subject: this.subject,
-      html: this.text,
+      to: _to,
+      from: this.from,
+      subject,
+      bcc,
+      replyTo: this.from,
+      text,
+      html,
+      attachments: anexos,
+      templateId,
+      dynamicTemplateData
     }
+
     const sender = await sgMail.send(email)
       .then((res) => res)
       .catch(err => err)
     console.log('SendGrid: ', email, sender.statusCode)
     return sender
   }
-
 }

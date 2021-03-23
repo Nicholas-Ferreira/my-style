@@ -4,15 +4,15 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { ProviderRolesGuard } from 'src/shared/roles/guard.roles';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: {
-        expiresIn: 18000,
-      },
+      signOptions: { expiresIn: 18000 },
     }),
   ],
   controllers: [AuthController],

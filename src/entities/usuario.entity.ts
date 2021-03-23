@@ -54,7 +54,6 @@ export class Usuario extends BaseEntity {
   enderecos: Endereco[];
 
   async checkPassword(password: string): Promise<boolean> {
-    console.log(password, this.salt)
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.senha;
   }

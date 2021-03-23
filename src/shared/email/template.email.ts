@@ -1,0 +1,1 @@
+export const CONFIRMATION_EMAIL = "d-9a43dde0beaf411385e9200e038e0e51"

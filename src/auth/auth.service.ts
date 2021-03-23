@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { SendGrid } from 'src/lib/sendgrid';
+import { CONFIRMATION_EMAIL } from 'src/shared/email/template.email';
 
 @Injectable()
 export class AuthService {
@@ -75,8 +76,11 @@ export class AuthService {
     usuario = await Usuario.findOneOrFail(usuario.id, { select: ['id', 'email', 'confirmationToken'] })
     new SendGrid({
       to: usuario.email,
-      subject: "Varifique seu e-mail",
-      text: `<a href='http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}'>Confirmar e-mail</a>`
+      subject: "Ative sua conta na My Style",
+      templateId: CONFIRMATION_EMAIL,
+      dynamicTemplateData:  {
+        linkToConfirmation: `<a href='http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}'>Confirmar e-mail</a>`
+      },
     }).send()
   }
 }

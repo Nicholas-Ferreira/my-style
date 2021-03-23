@@ -16,12 +16,13 @@ import { ProdutoModule } from './app/produto/produto.module';
 import { PedidoModule } from './app/pedido/pedido.module';
 import { LojaModule } from './app/loja/loja.module';
 import { AuthModule } from './auth/auth.module';
-import { ProviderRolesGuard, RolesGuard } from './shared/roles/guard.roles';
-import { APP_GUARD } from '@nestjs/core/constants';
+import { ProviderRolesGuard } from './shared/roles/guard.roles';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -51,5 +52,6 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],
+  exports: [],
 })
 export class AppModule { }
