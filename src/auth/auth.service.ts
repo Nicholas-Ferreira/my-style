@@ -79,7 +79,7 @@ export class AuthService {
       subject: "Ative sua conta na My Style",
       templateId: CONFIRMATION_EMAIL,
       dynamicTemplateData:  {
-        linkToConfirmation: `<a href='http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}'>Confirmar e-mail</a>`
+        linkToConfirmation: `http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}`
       },
     }).send()
   }
