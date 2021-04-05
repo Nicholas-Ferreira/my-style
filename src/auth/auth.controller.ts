@@ -7,16 +7,22 @@ import { SignInUsuarioDto } from './dto/signin-usuario.dto';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { UserRole } from 'src/shared/roles/usuario.roles';
 import { Roles } from 'src/shared/decorators/role.decorator';
+import { Recaptcha } from '@nestlab/google-recaptcha';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
+  //@Recaptcha()
   @Post('/signup')
   async signUp(@Body(ValidationPipe) signUpUsuarioDto: SignUpUsuarioDto) {
-   const usuario = await this.authService.signUp(signUpUsuarioDto);
-   if(usuario) await this.authService.sendConfirmationToken(usuario)
-   return usuario
+    const usuario = await this.authService.signUp(signUpUsuarioDto);
+    if (usuario) await this.authService.sendConfirmationToken(usuario)
+    delete usuario.confirmationToken
+    delete usuario.senha
+    delete usuario.salt
+    delete usuario.recoverToken
+    return usuario
   }
 
   @Post('/signin')
