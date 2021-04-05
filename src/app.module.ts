@@ -20,34 +20,18 @@ import { ProviderRolesGuard } from './shared/roles/guard.roles';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
+import { GoogleRecaptchaModule, GoogleRecaptchaNetwork } from '@nestlab/google-recaptcha';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'mystyle',
-      entities: [
-        Cartao,
-        CategoriaProduto,
-        ItemPedido,
-        Endereco,
-        Entrega,
-        Loja,
-        Pedido,
-        Produto,
-        Usuario
-      ],
-      synchronize: true,
-      logging: false,
+    TypeOrmModule.forRoot(),
+    GoogleRecaptchaModule.forRoot({
+      secretKey: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
+      response: req => req.headers.recaptcha,
+      skipIf: process.env.NODE_ENV !== 'production',
+      network: GoogleRecaptchaNetwork.Recaptcha,
+      agent: null
     }),
-    UsuarioModule,
-    ProdutoModule,
-    PedidoModule,
-    LojaModule,
     AuthModule
   ],
   controllers: [AppController],

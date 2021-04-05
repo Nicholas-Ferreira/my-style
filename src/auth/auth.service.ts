@@ -2,18 +2,20 @@ import { SignInUsuarioDto } from './dto/signin-usuario.dto';
 import { SignUpUsuarioDto } from './dto/signup-usuario.dto';
 import { Usuario } from 'src/entities/usuario.entity';
 import { Injectable } from '@nestjs/common';
-import { ConflictException, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
+import { ConflictException, ForbiddenException, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common/exceptions';
 import { UserRole } from 'src/shared/roles/usuario.roles';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { SendGrid } from 'src/lib/sendgrid';
 import { CONFIRMATION_EMAIL } from 'src/shared/email/template.email';
+import { GoogleRecaptchaValidator } from '@nestlab/google-recaptcha/services/google-recaptcha.validator';
+import { GoogleRecaptchaException } from '@nestlab/google-recaptcha';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) { }
 
   async signUp(createUsuarioDto: SignUpUsuarioDto): Promise<Usuario> {
@@ -34,7 +36,6 @@ export class AuthService {
     novo_usuario.nome = nome;
     novo_usuario.role = UserRole.USER;
     novo_usuario.status = false;
-    novo_usuario.confirmationToken = crypto.randomBytes(32).toString('hex');
     novo_usuario.salt = await bcrypt.genSalt();
     novo_usuario.senha = await bcrypt.hash(senha, novo_usuario.salt);
 
@@ -50,9 +51,9 @@ export class AuthService {
 
   async signIn(credentialsDto: SignInUsuarioDto) {
     const { email, senha } = credentialsDto;
-    
-    const usuario = await Usuario.findOne({ email, status: true }, { select: ['salt', 'senha'] });
+    const usuario = await Usuario.findOne({ email }, { select: ['salt', 'senha', 'status'] });
     if (!usuario) throw new NotFoundException("Usuário não encontrado")
+    if (!usuario.status) throw new ForbiddenException("E-mail não validado")
 
     const auth = await usuario.checkPassword(senha)
     if (!auth) throw new UnauthorizedException('Credenciais inválidas');
@@ -74,12 +75,15 @@ export class AuthService {
 
   async sendConfirmationToken(usuario: Usuario) {
     usuario = await Usuario.findOneOrFail(usuario.id, { select: ['id', 'email', 'confirmationToken'] })
+    usuario.confirmationToken = crypto.randomBytes(32).toString('hex');
+    await usuario.save()
+
     new SendGrid({
       to: usuario.email,
       subject: "Ative sua conta na My Style",
       templateId: CONFIRMATION_EMAIL,
-      dynamicTemplateData:  {
-        linkToConfirmation: `http://localhost:3000/auth/confirm/${usuario.id}/${usuario.confirmationToken}`
+      dynamicTemplateData: {
+        linkToConfirmation: `${process.env.BASE_URL}/auth/confirm/${usuario.id}/${usuario.confirmationToken}`
       },
     }).send()
   }
