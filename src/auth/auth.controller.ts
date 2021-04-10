@@ -13,7 +13,12 @@ import { Recaptcha } from '@nestlab/google-recaptcha';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  //@Recaptcha()
+  @Recaptcha()
+  @Get('/captcha')
+  async captcha() {
+    return 'Captcha válido'
+  }
+
   @Post('/signup')
   async signUp(@Body(ValidationPipe) signUpUsuarioDto: SignUpUsuarioDto) {
     const usuario = await this.authService.signUp(signUpUsuarioDto);

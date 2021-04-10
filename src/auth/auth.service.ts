@@ -9,8 +9,6 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { SendGrid } from 'src/lib/sendgrid';
 import { CONFIRMATION_EMAIL } from 'src/shared/email/template.email';
-import { GoogleRecaptchaValidator } from '@nestlab/google-recaptcha/services/google-recaptcha.validator';
-import { GoogleRecaptchaException } from '@nestlab/google-recaptcha';
 
 @Injectable()
 export class AuthService {
@@ -80,7 +78,7 @@ export class AuthService {
 
     new SendGrid({
       to: usuario.email,
-      subject: "Ative sua conta na My Style",
+      subject: "Us knows your style!",
       templateId: CONFIRMATION_EMAIL,
       dynamicTemplateData: {
         linkToConfirmation: `${process.env.BASE_URL}/auth/confirm/${usuario.id}/${usuario.confirmationToken}`
