@@ -1,3 +1,4 @@
+import { Endereco } from './endereco.entity';
 import { Cartao } from './cartao.entity';
 import { ItemPedido } from './itemPedido.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany, BaseEntity, DeleteDateColumn } from 'typeorm';
@@ -17,6 +18,9 @@ export class Pedido extends BaseEntity {
   @DeleteDateColumn()
   cancelado_em: Date
   
+  @ManyToOne(type => Endereco, endereco => endereco.pedidos)
+  endereco: Endereco;
+
   @ManyToOne(type => Cartao, cartao => cartao.pedidos)
   cartao: Cartao;
   

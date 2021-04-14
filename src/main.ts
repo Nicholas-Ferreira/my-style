@@ -6,6 +6,8 @@ const sgMail = require('@sendgrid/mail')
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
+  
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   app.useGlobalPipes(new ValidationPipe());
   

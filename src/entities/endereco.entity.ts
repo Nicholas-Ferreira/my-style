@@ -1,3 +1,4 @@
+import { Pedido } from 'src/entities/pedido.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, BaseEntity } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { Entrega } from './entrega.entity';
@@ -33,4 +34,7 @@ export class Endereco extends BaseEntity{
 
   @OneToMany(type => Entrega, entrega => entrega.endereco)
   entragas: Entrega[];
+  
+  @OneToMany(type => Pedido, pedido => pedido.endereco)
+  pedidos: Pedido[];
 }

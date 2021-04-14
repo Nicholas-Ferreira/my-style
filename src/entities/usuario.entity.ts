@@ -15,7 +15,13 @@ export class Usuario extends BaseEntity {
   nome: string;
 
   @Column({ nullable: false, type: 'varchar', length: 200 })
+  documento: string;
+
+  @Column({ nullable: false, type: 'varchar', length: 200 })
   email: string;
+
+  @Column({ nullable: false, type: 'varchar', length: 200 })
+  telefone: string;
 
   @Column({ select: false, nullable: false })
   senha: string;

@@ -19,6 +19,7 @@ export class AuthController {
     return 'Captcha válido'
   }
 
+  @Recaptcha()
   @Post('/signup')
   async signUp(@Body(ValidationPipe) signUpUsuarioDto: SignUpUsuarioDto) {
     const usuario = await this.authService.signUp(signUpUsuarioDto);
