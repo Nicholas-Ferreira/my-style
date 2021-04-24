@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GoogleRecaptchaModule, GoogleRecaptchaNetwork } from '@nestlab/google-recaptcha';
 import { ProdutoModule } from './app/produto/produto.module';
 import { PedidoModule } from './app/pedido/pedido.module';
+import { UsuarioModule } from './app/usuario/usuario.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { PedidoModule } from './app/pedido/pedido.module';
     }),
     AuthModule,
     ProdutoModule,
-    PedidoModule
+    PedidoModule,
+    UsuarioModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],

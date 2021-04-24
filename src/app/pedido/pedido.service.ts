@@ -1,26 +1,36 @@
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { Produto } from './../../entities/produto.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { Cartao } from 'src/entities/cartao.entity';
 import { ItemPedido } from 'src/entities/itemPedido.entity';
 import { Pedido } from 'src/entities/pedido.entity';
 import { Usuario } from 'src/entities/usuario.entity';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
+import { getConnection } from 'typeorm';
+import { PagarmeService } from 'src/lib/pagarme';
 
 @Injectable()
 export class PedidoService {
-  async create(usuario: Usuario, cartao: Cartao, createPedidoDto: CreatePedidoDto) {
-    const pedido = await Pedido.create({ ...createPedidoDto, usuario, cartao }).save()
-    createPedidoDto.itens.map(async item => {
+  async create(usuario: Usuario, pedidoDto: CreatePedidoDto) {
+    const cartao = await usuario.findCartaoById(pedidoDto.idCartao)
+    if (!cartao) throw new NotFoundException("Catão invalido")
+
+    const endereco = await usuario.findEnderecoById(pedidoDto.idEndereco)
+    if (!endereco) throw new NotFoundException("Endereço invalido")
+
+    const pedido = Pedido.create({ usuario, cartao, endereco, parcelado: pedidoDto.parcelado })
+
+    pedido.detalhes = await Promise.all(pedidoDto.itens.map(async item => {
       const produto = await Produto.findOne(item.produtoId)
-      await ItemPedido.create({
-        preco: produto.preco,
+      return ItemPedido.create({
         quantidade: item.quantidade,
-        pedido: pedido,
+        preco: produto.preco,
         produto: produto
-      }).save()
-    })
-    return pedido
+      })
+    }))
+
+    return pedido.save()
   }
 
   findAll() {

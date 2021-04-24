@@ -12,17 +12,18 @@ import { PagarmeService } from 'src/lib/pagarme';
 export class PedidoController {
   constructor(private readonly pedidoService: PedidoService,
     private readonly pagarmeService: PagarmeService
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(AuthGuard())
   async create(
     @Body() createPedidoDto: CreatePedidoDto,
-    @GetUser() user: Usuario
+    @GetUser() usuario: Usuario
   ) {
-    const usuario = await Usuario.findOne(createPedidoDto.idUsuario)
-    const cartao = await Cartao.findOne(createPedidoDto.idCartao)
-    return this.pedidoService.create(usuario, cartao, createPedidoDto);
+    const pedido = await this.pedidoService.create(usuario, createPedidoDto);
+    const pagamento = await this.pagarmeService.pagar(pedido)
+
+    return pagamento
   }
 
   @Get()

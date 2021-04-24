@@ -63,4 +63,12 @@ export class Usuario extends BaseEntity {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.senha;
   }
+
+  findCartaoById(id: number): Promise<Cartao | undefined> {
+    return Cartao.findOne(id, { where: { usuario: this } })
+  }
+
+  findEnderecoById(id: number): Promise<Endereco | undefined> {
+    return Endereco.findOne(id, { where: { usuario: this } })
+  }
 }

@@ -7,7 +7,7 @@ export class ItemPedido extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: false })
   preco: number;
   
   @Column()

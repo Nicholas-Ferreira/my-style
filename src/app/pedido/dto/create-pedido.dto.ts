@@ -5,17 +5,20 @@ import { Usuario } from 'src/entities/usuario.entity';
 export class CreatePedidoDto {
   @IsNumber()
   @Expose()
-  idUsuario: number
+  idCartao: number
 
   @IsNumber()
   @Expose()
-  idCartao: number
+  idEndereco: number
+
+  @IsNumber()
+  @Expose()
+  parcelado: number
   
   @IsArray()
   @Expose()
   itens: {
     produtoId:number;
-    preco:number;
     quantidade: number;
   }[];
 }

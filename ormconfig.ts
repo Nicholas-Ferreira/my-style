@@ -12,6 +12,7 @@ module.exports = [
       migrationsDir: './dist/**/migrations/',
       entitiesDir: './dist/**/entities/',
     },
-    synchronize: true
+    synchronize: true,
+    logging: false
   },
 ]
