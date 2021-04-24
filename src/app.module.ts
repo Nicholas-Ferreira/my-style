@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { GoogleRecaptchaModule, GoogleRecaptchaNetwork } from '@nestlab/google-recaptcha';
 import { PaymentModule } from './app/payment/payment.module';
+import { ProductsModule } from './app/products/products.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { PaymentModule } from './app/payment/payment.module';
       agent: null
     }),
     AuthModule,
-    PaymentModule
+    PaymentModule,
+    ProductsModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],

@@ -9,12 +9,6 @@ export class CategoriaProduto extends BaseEntity {
   @Column()
   nome: string;
 
-  @Column()
-  marca: string;
-  
-  @Column()
-  estilo: string;
-
   @OneToMany(type => Produto, produto => produto.categoria)
   produtos: Produto[];
 }   
