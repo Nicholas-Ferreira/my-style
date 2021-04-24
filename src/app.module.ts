@@ -8,8 +8,8 @@ import { JwtStrategy } from './app/auth/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { GoogleRecaptchaModule, GoogleRecaptchaNetwork } from '@nestlab/google-recaptcha';
-import { PaymentModule } from './app/payment/payment.module';
-import { ProductsModule } from './app/products/products.module';
+import { ProdutoModule } from './app/produto/produto.module';
+import { PedidoModule } from './app/pedido/pedido.module';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { ProductsModule } from './app/products/products.module';
       agent: null
     }),
     AuthModule,
-    PaymentModule,
-    ProductsModule
+    ProdutoModule,
+    PedidoModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],

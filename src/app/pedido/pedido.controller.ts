@@ -1,16 +1,25 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { PedidoService } from './pedido.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { Usuario } from 'src/entities/usuario.entity';
 import { Cartao } from 'src/entities/cartao.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { PagarmeService } from 'src/lib/pagarme';
 
 @Controller('pedido')
 export class PedidoController {
-  constructor(private readonly pedidoService: PedidoService) {}
+  constructor(private readonly pedidoService: PedidoService,
+    private readonly pagarmeService: PagarmeService
+  ) {}
 
   @Post()
-  async create(@Body() createPedidoDto: CreatePedidoDto) {
+  @UseGuards(AuthGuard())
+  async create(
+    @Body() createPedidoDto: CreatePedidoDto,
+    @GetUser() user: Usuario
+  ) {
     const usuario = await Usuario.findOne(createPedidoDto.idUsuario)
     const cartao = await Cartao.findOne(createPedidoDto.idCartao)
     return this.pedidoService.create(usuario, cartao, createPedidoDto);
