@@ -11,6 +11,8 @@ import { GoogleRecaptchaModule, GoogleRecaptchaNetwork } from '@nestlab/google-r
 import { ProdutoModule } from './app/produto/produto.module';
 import { PedidoModule } from './app/pedido/pedido.module';
 import { UsuarioModule } from './app/usuario/usuario.module';
+import { EnderecoModule } from './app/endereco/endereco.module';
+import { CartaoModule } from './app/cartao/cartao.module';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { UsuarioModule } from './app/usuario/usuario.module';
     AuthModule,
     ProdutoModule,
     PedidoModule,
-    UsuarioModule
+    UsuarioModule,
+    EnderecoModule,
+    CartaoModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],

@@ -1,8 +1,52 @@
-export interface ReponsePayment {
+
+export interface ICardPagarme {
+  card_holder_name: string
+  card_expiration_date: string
+  card_number: string
+  card_cvv: number
+}
+
+export interface ICardValidation {
+  card: {
+    card_number?: string;
+    card_holder_name?: string;
+    card_expiration_month?: string;
+    card_expiration_year?: string;
+    card_cvv?: string;
+  }
+}
+export interface IPagarmeClient {
+  transactions: {
+    create(transaction: any): Promise<IResponsePayment>;
+    all: Function
+  }
+  validate(valid: { card: ICardPagarme }): ICardValidation
+  security: {
+    encrypt(card: ICardPagarme): Promise<string>
+  }
+}
+
+export interface IResponseCardId {
+  object: 'card',
+  id: string; //'card_cknwdr78l1vlv0o9tnn2w2ufv',
+  date_created: string; //'2021-04-24T23:34:57.381Z',
+  date_updated: string; //'2021-04-24T23:34:57.942Z',
+  brand: string; //'mastercard',
+  holder_name: string; //'NICHOALAS',
+  first_digits: string; //'557255',
+  last_digits: string; //'7745',
+  country: string; //'UNITED STATES OF AMERICA',
+  fingerprint: string; //'cknwd5iuo26b80m76ngzg1uev',
+  customer: null,
+  valid: boolean,
+  expiration_date: string //'0522'
+}
+
+export interface IResponsePayment {
   "object": string; // "transaction",
-  "status": string; // "paid",
-  "refse_reason": null,
-  "status_reason": string; // "acquirer",
+  "status": 'processing' | 'authorized' | 'paid' | 'refunded' | 'waiting_payment' | 'pending_refund' | 'refused';
+  "refse_reason": null | 'acquirer' | 'antifraud' | 'internal_error' | 'no_acquirer' | 'acquirer_timeout'
+  "status_reason": string | 'acquirer' | 'antifraud' | 'internal_error' | 'no_acquirer' | 'acquirer_timeout'; // "acquirer",
   "acquirer_response_code": string; // "0000",
   "acquirer_name": string; // "pagarme",
   "acquirer_id": string; // "5969170917bce0470c8bf099",
@@ -52,11 +96,11 @@ export interface ReponsePayment {
     "gender": null,
     "date_created": string; // "2017-08-14T20:35:45.963Z",
     "documents": Array<{
-        "object": string; // "document",
-        "id": string; // "doc_cj6cmcm2l01z5696dyamemdnf",
-        "type": string; // "cpf",
-        "number": string; // "30621143049"
-      }>
+      "object": string; // "document",
+      "id": string; // "doc_cj6cmcm2l01z5696dyamemdnf",
+      "type": string; // "cpf",
+      "number": string; // "30621143049"
+    }>
   },
   "billing": {
     "address": {

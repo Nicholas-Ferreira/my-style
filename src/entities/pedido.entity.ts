@@ -5,13 +5,13 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, On
 import { Usuario } from './usuario.entity';
 import { Entrega } from './entrega.entity';
 
-export type IStatus = 'PROCESSANDO' | 'PAGO' | 'RECUSADO' | 'TRANSITO' | 'ENTREGUE' | 'CANCELADO'
+export type IStatus = 'processing' | 'authorized' | 'paid' | 'refunded' | 'waiting_payment' | 'pending_refund' | 'refused' | 'error'
 @Entity()
 export class Pedido extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: 'PRPCESSADO' })
+  @Column({ default: 'processing' })
   status: IStatus;
 
   @CreateDateColumn()

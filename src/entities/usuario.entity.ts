@@ -1,7 +1,7 @@
 import { Endereco } from './endereco.entity';
 import { Cartao } from './cartao.entity';
 import { Loja } from './loja.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, BaseEntity, UpdateDateColumn, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, BaseEntity, UpdateDateColumn, Unique, FindOneOptions } from 'typeorm';
 import { Pedido } from './pedido.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -64,8 +64,8 @@ export class Usuario extends BaseEntity {
     return hash === this.senha;
   }
 
-  findCartaoById(id: number): Promise<Cartao | undefined> {
-    return Cartao.findOne(id, { where: { usuario: this } })
+  findCartaoById(id: number, options?: FindOneOptions<Cartao>): Promise<Cartao | undefined> {
+    return Cartao.findOne(id, { ...options, where: { usuario: this }})
   }
 
   findEnderecoById(id: number): Promise<Endereco | undefined> {

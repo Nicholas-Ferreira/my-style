@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Endereco } from 'src/entities/endereco.entity';
 import { Usuario } from 'src/entities/usuario.entity';
-import { CreateEnderecoDto } from '../dto/create-endereco.dto';
-import { UpdateEnderecoDto } from '../dto/update-endereco.dto';
+import { CreateEnderecoDto } from './dto/create-endereco.dto';
+import { UpdateEnderecoDto } from './dto/update-endereco.dto';
 
 @Injectable()
 export class EnderecoService {

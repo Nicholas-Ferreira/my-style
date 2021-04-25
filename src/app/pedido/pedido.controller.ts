@@ -15,13 +15,18 @@ export class PedidoController {
   ) { }
 
   @Post()
-  @UseGuards(AuthGuard())
   async create(
     @Body() createPedidoDto: CreatePedidoDto,
     @GetUser() usuario: Usuario
   ) {
     const pedido = await this.pedidoService.create(usuario, createPedidoDto);
     const pagamento = await this.pagarmeService.pagar(pedido)
+      .catch(async err => {
+        pedido.status = 'error'
+        pedido.cancelado_em = new Date()
+        await pedido.save()
+        throw err
+      })
 
     return pagamento
   }

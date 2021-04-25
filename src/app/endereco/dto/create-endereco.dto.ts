@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 import { Usuario } from 'src/entities/usuario.entity';
 
 export class CreateEnderecoDto {
@@ -11,8 +11,9 @@ export class CreateEnderecoDto {
   numero: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  cep: number;
+  @IsString()
+  @Length(8, 8)
+  cep: string;
 
   @IsNotEmpty()
   @IsString()

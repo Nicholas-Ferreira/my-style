@@ -13,7 +13,7 @@ import { PagarmeService } from 'src/lib/pagarme';
 @Injectable()
 export class PedidoService {
   async create(usuario: Usuario, pedidoDto: CreatePedidoDto) {
-    const cartao = await usuario.findCartaoById(pedidoDto.idCartao)
+    const cartao = await usuario.findCartaoById(pedidoDto.idCartao, { select: ['id', 'hash'] })
     if (!cartao) throw new NotFoundException("Catão invalido")
 
     const endereco = await usuario.findEnderecoById(pedidoDto.idEndereco)

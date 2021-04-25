@@ -4,7 +4,7 @@ import { Usuario } from './usuario.entity';
 import { Entrega } from './entrega.entity';
 
 @Entity()
-export class Endereco extends BaseEntity{
+export class Endereco extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,8 +14,8 @@ export class Endereco extends BaseEntity{
   @Column()
   numero: number;
 
-  @Column()
-  cep: number;
+  @Column({ length: 8 })
+  cep: string;
 
   @Column()
   complemento: string;
@@ -34,7 +34,7 @@ export class Endereco extends BaseEntity{
 
   @OneToMany(type => Entrega, entrega => entrega.endereco)
   entragas: Entrega[];
-  
+
   @OneToMany(type => Pedido, pedido => pedido.endereco)
   pedidos: Pedido[];
 }

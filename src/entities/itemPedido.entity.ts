@@ -1,5 +1,5 @@
 import { Pedido } from './pedido.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BaseEntity, DeleteDateColumn } from 'typeorm';
 import { Produto } from './produto.entity';
 
 @Entity()
