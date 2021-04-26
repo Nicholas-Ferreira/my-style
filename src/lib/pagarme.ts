@@ -1,3 +1,4 @@
+import { ItemPedido } from 'src/entities/itemPedido.entity';
 import { CreateCartaoDto } from './../app/cartao/dto/create-cartao.dto';
 import { BadGatewayException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Pedido } from './../entities/pedido.entity';
@@ -20,10 +21,10 @@ export class PagarmeService {
       console.log(!detalhes, !cartao, !usuario, !endereco, !cartao.hash)
       throw new InternalServerErrorException("Falha ao processar pedido")
     }
-
     try {
+      const total = detalhes.reduce((valorTotal, item) => (valorTotal + +item.preco), 0)
       const transactionData = {
-        amount: detalhes.reduce((valorTotal, item) => (valorTotal + +item.preco), 0) * 100,
+        amount: total * 100,
         payment_method: 'credit_card',
         card_id: cartao.hash,
         customer: {
@@ -54,20 +55,12 @@ export class PagarmeService {
           quantity: item.quantidade,
           tangible: true
         })),
-        /*split_rules: [
-          {
-            "recipient_id": "re_cj6cglnhc0bbcbt6dbsl8fdcs",
-            "percentage": 50,
-            "liable": true,
-            "charge_processing_fee": true
-          }
-        ],*/
+        split_rules: this.splitRules(detalhes, total),
         metadata: {
           invoice_id: pedido.id,
         },
         capture: true,
         async: false,
-        // postback_url: '', // Endpoint do seu sistema que receberá informações a cada atualização da transação. Caso você defina este parâmetro, o processamento da transação se torna assíncrono.
       }
       console.log(transactionData)
 
@@ -112,7 +105,32 @@ export class PagarmeService {
       card_hash: card_hash
     })
     if (status !== 200) throw new BadGatewayException(data)
-    
+
     return data.id
+  }
+
+  private splitRules(itens: ItemPedido[], total: number) {
+    const split = {}
+
+    itens.map(i => {
+      console.log(i.produto)
+      const loja = split[i.produto.loja.hash]
+      if (loja == undefined) split[i.produto.loja.hash] = 0
+      split[i.produto.loja.hash] += +i.preco
+      console.log(split, split[i.produto.loja.hash])
+    })
+    
+    const split_rules = []
+    for (const hash in split) {
+      if (Object.prototype.hasOwnProperty.call(split, hash)) {
+        const valor = split[hash];
+        split_rules.push({
+          recipient_id: hash,
+          amount: valor * 100
+        })
+      }
+    }
+
+    return split_rules
   }
 }

@@ -12,7 +12,6 @@ export class CreateCartaoDto {
   card_number: string;
 
   @IsNotEmpty()
-  @IsNumber()
   card_cvv: number;
 
   @IsNotEmpty()

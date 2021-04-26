@@ -13,6 +13,7 @@ import { PedidoModule } from './app/pedido/pedido.module';
 import { UsuarioModule } from './app/usuario/usuario.module';
 import { EnderecoModule } from './app/endereco/endereco.module';
 import { CartaoModule } from './app/cartao/cartao.module';
+import { LojaModule } from './app/loja/loja.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CartaoModule } from './app/cartao/cartao.module';
     UsuarioModule,
     EnderecoModule,
     CartaoModule,
+    LojaModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy, PassportModule, ProviderRolesGuard],

@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { Produto } from './../../entities/produto.entity';
-import { Injectable, ExecutionContext } from '@nestjs/common';
+import { Injectable, ExecutionContext, InternalServerErrorException } from '@nestjs/common';
 import { Cartao } from 'src/entities/cartao.entity';
 import { ItemPedido } from 'src/entities/itemPedido.entity';
 import { Pedido } from 'src/entities/pedido.entity';
@@ -22,14 +22,13 @@ export class PedidoService {
     const pedido = Pedido.create({ usuario, cartao, endereco, parcelado: pedidoDto.parcelado })
 
     pedido.detalhes = await Promise.all(pedidoDto.itens.map(async item => {
-      const produto = await Produto.findOne(item.produtoId)
+      const produto = await Produto.findOne(item.produtoId, {relations: ['loja']})
       return ItemPedido.create({
         quantidade: item.quantidade,
         preco: produto.preco,
         produto: produto
       })
     }))
-
     return pedido.save()
   }
 

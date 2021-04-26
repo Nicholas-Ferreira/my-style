@@ -18,6 +18,9 @@ export class CartaoService {
     _cartao.hash = card_hash
     _cartao.usuario = usuario
     _cartao.save()
+
+    delete _cartao.hash
+    return _cartao
   }
 
   findAll(usuario: Usuario) {

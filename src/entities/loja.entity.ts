@@ -9,6 +9,9 @@ export class Loja extends BaseEntity {
   id: number;
 
   @Column()
+  hash: string;
+
+  @Column()
   nome: string;
 
   @Column()
