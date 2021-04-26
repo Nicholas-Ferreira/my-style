@@ -9,10 +9,10 @@ export class Endereco extends BaseEntity {
   id: number;
 
   @Column()
-  endereco: string;
+  logradouro: string;
 
   @Column()
-  numero: number;
+  numero: string;
 
   @Column({ length: 8 })
   cep: string;

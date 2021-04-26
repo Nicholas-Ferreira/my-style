@@ -1,5 +1,5 @@
 import { Usuario } from 'src/entities/usuario.entity';
-import { Controller, Post, Body, ValidationPipe, Get, UseGuards, Req, SetMetadata, Param } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, Get, UseGuards, Req, SetMetadata, Param, HttpCode } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SignUpUsuarioDto } from './dto/signup-usuario.dto';
@@ -34,6 +34,7 @@ export class AuthController {
 
   @Public()
   @Post('/signin')
+  @HttpCode(200)
   async signIn(@Body(ValidationPipe) signInUsuarioDto: SignInUsuarioDto): Promise<{ token: string }> {
     return await this.authService.signIn(signInUsuarioDto);
   }

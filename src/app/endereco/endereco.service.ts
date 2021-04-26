@@ -10,19 +10,19 @@ export class EnderecoService {
     return Endereco.create({ ...createEnderecoDto, usuario }).save()
   }
 
-  findAll() {
-    return Endereco.find()
+  findAll(usuario: Usuario) {
+    return Endereco.find({ usuario })
   }
 
-  findOne(id: number) {
-    return Endereco.findOne(id)
+  findOne(usuario: Usuario, id: number) {
+    return Endereco.findOne({ id, usuario })
   }
 
-  update(id: number, updateEnderecoDto: UpdateEnderecoDto) {
-    return Endereco.update(id, updateEnderecoDto)
+  update(usuario: Usuario, id: number, updateEnderecoDto: UpdateEnderecoDto) {
+    return Endereco.update({ id, usuario }, updateEnderecoDto)
   }
 
-  remove(id: number) {
+  remove(usuario: Usuario, id: number) {
     return Endereco.delete(id)
   }
 }

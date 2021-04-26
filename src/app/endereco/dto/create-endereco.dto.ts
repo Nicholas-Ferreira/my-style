@@ -4,11 +4,10 @@ import { Usuario } from 'src/entities/usuario.entity';
 export class CreateEnderecoDto {
   @IsString()
   @IsNotEmpty()
-  endereco: string;
+  logradouro: string;
 
-  @IsNumber()
   @IsNotEmpty()
-  numero: number;
+  numero: string;
 
   @IsNotEmpty()
   @IsString()

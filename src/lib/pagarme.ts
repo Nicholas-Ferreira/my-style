@@ -40,10 +40,10 @@ export class PagarmeService {
           address: {
             state: endereco.estado,
             zipcode: endereco.cep,
-            street_number: endereco.numero.toString(),
+            street_number: endereco.numero,
             city: endereco.cidade,
             neighborhood: endereco.bairro,
-            street: endereco.endereco,
+            street: endereco.logradouro,
             country: 'br',
           },
         },
