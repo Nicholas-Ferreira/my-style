@@ -4,6 +4,8 @@ import { CategoriaProduto } from './categoriaProduto.entity';
 import { ItemPedido } from './itemPedido.entity';
 import { ImagemProduto } from './produtoImage.entity';
 import { TamanhoProduto } from './produtoTamanho.entity';
+import { TagProduto } from './produtoTag.entity';
+import { CorProduto } from './produtoCor.entity';
 
 @Entity()
 export class Produto extends BaseEntity {
@@ -49,7 +51,16 @@ export class Produto extends BaseEntity {
   @OneToMany(type => ImagemProduto, imagemProduto => imagemProduto.produto)
   imagens: ImagemProduto[];
 
+  @OneToMany(type => CorProduto, corProduto => corProduto.produto, { 
+    cascade: true 
+  })
+  cores: CorProduto[];
+
   @ManyToMany(type => TamanhoProduto)
   @JoinTable()
   tamanhos: TamanhoProduto[]
+
+  @ManyToMany(type => TagProduto)
+  @JoinTable()
+  tags: TagProduto[]
 }

@@ -17,18 +17,18 @@ export class Loja extends BaseEntity {
   @Column()
   logomarca: string;
 
-  @Column()
-  cnpj: number;
-  
+  @Column({ length: 14 })
+  cnpj: string;
+
   @Column()
   email: string;
 
   @CreateDateColumn()
   criado_em: Date;
-  
+
   @OneToMany(type => Produto, produto => produto.loja)
   produtos: Produto[];
 
   @ManyToOne(type => Usuario, usuario => usuario.lojas)
   representante: Usuario;
-}   
+}

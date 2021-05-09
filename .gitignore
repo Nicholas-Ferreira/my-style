@@ -400,3 +400,13 @@ dist
 # Environment
 .env
 .env.production
+
+
+# Upload Files
+upload/*.png
+upload/*.jpg
+upload/*.jpeg
+upload/*.gif
+
+# Google
+google-key.json
