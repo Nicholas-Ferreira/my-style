@@ -62,6 +62,6 @@ export class ProdutoService {
     produto.cores = colors
     await produto.save()
 
-    return { publicUrl, produto }
+    return { publicUrl, produto, data }
   }
 }

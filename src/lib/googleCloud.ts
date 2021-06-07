@@ -55,10 +55,12 @@ export class GoogleService {
 
   async uploadBucket(produto: Produto, fileUpload: Express.Multer.File) {
     const bucket = this.storage.bucket('my-style')
+    
     const pathLoja = `${produto.loja.id}_${produto.loja.nome.replace(/ /g, "_").slice(0, 50)}`
     const pathProduto = `${produto.id}_${produto.titulo.replace(/ /g, "_")}`
     const pathBucket = `${pathLoja}/${pathProduto}/${fileUpload.filename}`
     const publicUrl = `https://storage.googleapis.com/${bucket.name}/${pathBucket}`
+
     const [file, metadata] = await bucket.upload(fileUpload.path, {
       destination: pathBucket
     })

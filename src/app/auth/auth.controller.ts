@@ -32,6 +32,7 @@ export class AuthController {
     return usuario
   }
 
+  @Recaptcha()
   @Public()
   @Post('/signin')
   @HttpCode(200)

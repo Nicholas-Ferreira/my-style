@@ -20,6 +20,7 @@ export const imageFileFilter = (req, file, callback) => {
 };
 
 export const convertLabelAnnotationsToTag = async (labelAnnotations: google.cloud.vision.v1.IEntityAnnotation[]) => {
+  if (!labelAnnotations?.length) return []
   return (await Promise.all(labelAnnotations.map(async label => {
     const tag = new TagProduto(label.description)
     return await tag.save({ chunk: 100 })
@@ -32,6 +33,7 @@ export const convertLabelAnnotationsToTag = async (labelAnnotations: google.clou
 }
 
 export const convertImagePropertiesAnnotationToColors = async (colors: google.cloud.vision.v1.IColorInfo[]) => {
+  if (!colors?.length) return []
   return colors.map(({ color, score, pixelFraction }) => {
     const cor = new CorProduto()
     const { red, green, blue, alpha } = color
